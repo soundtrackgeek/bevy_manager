@@ -1,0 +1,195 @@
+:root {
+  font-family:
+    "Segoe UI Variable Display", "Segoe UI", Inter, Helvetica, Arial,
+    sans-serif;
+  color: #f7fbff;
+  background: #031429;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+}
+
+.opening-screen {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  min-height: 32rem;
+  overflow: hidden;
+  background-image: url("./assets/menu-stadium-background.png");
+  background-position: center center;
+  background-size: cover;
+}
+
+.menu-panel {
+  position: absolute;
+  z-index: 1;
+  isolation: isolate;
+  inset: 0 auto 0 0;
+  display: flex;
+  width: clamp(25rem, 31.5vw, 38rem);
+  padding: clamp(2.5rem, 5.2vw, 6.25rem) clamp(2rem, 3.15vw, 3.75rem);
+  align-items: center;
+}
+
+.menu-panel::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(145deg, rgba(2, 17, 39, 0.98), rgba(0, 11, 27, 0.94)),
+    rgba(1, 15, 35, 0.96);
+  clip-path: polygon(0 0, 100% 0, 83% 100%, 0 100%);
+  box-shadow: 1.5rem 0 4rem rgba(0, 0, 0, 0.38);
+  content: "";
+}
+
+.menu-panel::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(
+      145deg,
+      transparent 0 33.9%,
+      rgba(88, 166, 228, 0.2) 34%,
+      transparent 34.2%
+    ),
+    linear-gradient(
+      35deg,
+      transparent 0 61.5%,
+      rgba(64, 143, 207, 0.16) 61.65%,
+      transparent 61.9%
+    ),
+    linear-gradient(
+      145deg,
+      transparent 0 56%,
+      rgba(13, 55, 92, 0.2) 56.2% 100%
+    ),
+    linear-gradient(
+      35deg,
+      transparent 0 72%,
+      rgba(17, 64, 104, 0.18) 72.2% 100%
+    );
+  clip-path: polygon(0 0, 100% 0, 83% 100%, 0 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.menu {
+  position: relative;
+  display: grid;
+  width: 100%;
+  gap: clamp(1rem, 3vh, 1.8rem);
+  transform: translateY(1.4vh);
+}
+
+.menu-button {
+  position: relative;
+  min-height: clamp(4.4rem, 9.8vh, 6.3rem);
+  padding: 0.9rem 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(87, 178, 244, 0.82);
+  border-radius: 0.4rem;
+  color: #f8fbff;
+  background:
+    linear-gradient(180deg, rgba(7, 34, 65, 0.9), rgba(2, 20, 44, 0.93)),
+    rgba(2, 21, 47, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0.5rem 1.2rem rgba(0, 0, 0, 0.16);
+  font-size: clamp(1.35rem, 2.15vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.menu:not(:hover) .menu-button:first-child,
+.menu-button:hover,
+.menu-button:focus-visible {
+  border-color: #47ff82;
+  background:
+    linear-gradient(180deg, rgba(0, 174, 58, 0.94), rgba(0, 103, 37, 0.96)),
+    #007d32;
+  box-shadow:
+    inset 0 1px 0 rgba(205, 255, 219, 0.32),
+    0 0 0 1px rgba(83, 255, 133, 0.3),
+    0 0 1.3rem rgba(0, 255, 85, 0.46),
+    0 0.9rem 2.2rem rgba(0, 0, 0, 0.32);
+}
+
+.menu-button:hover {
+  transform: translateX(0.3rem);
+}
+
+.menu-button:active {
+  transform: translateX(0.3rem) scale(0.99);
+}
+
+.version {
+  position: absolute;
+  z-index: 2;
+  bottom: 1rem;
+  left: 1.25rem;
+  margin: 0;
+  color: rgba(220, 235, 249, 0.72);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 0.4rem rgba(0, 0, 0, 0.72);
+  text-transform: uppercase;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 800px) {
+  .menu-panel {
+    width: min(82vw, 30rem);
+  }
+
+  .menu {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-button {
+    transition: none;
+  }
+}
