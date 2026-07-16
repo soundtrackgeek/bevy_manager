@@ -95,12 +95,50 @@ input {
   pointer-events: none;
 }
 
-.menu {
+.menu-stage {
   position: relative;
   display: grid;
   width: 100%;
-  gap: clamp(1rem, 3vh, 1.8rem);
   transform: translateY(1.4vh);
+}
+
+.menu {
+  position: relative;
+  display: grid;
+  grid-area: 1 / 1;
+  width: 100%;
+  gap: clamp(1rem, 3vh, 1.8rem);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(1.4rem);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 220ms step-end;
+}
+
+.menu.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 0ms step-start;
+}
+
+.menu.is-entering-from-left {
+  transform: translateX(-1.4rem);
+}
+
+.menu.is-leaving-left {
+  transform: translateX(-1.4rem);
+}
+
+.menu.is-leaving-right {
+  transform: translateX(1.4rem);
 }
 
 .menu-button {
@@ -858,6 +896,7 @@ input {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .menu,
   .menu-button,
   .settings-overlay,
   .settings-dialog,

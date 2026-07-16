@@ -12,17 +12,46 @@
     <main class="opening-screen">
       <h1 class="visually-hidden">Ultimate Manager</h1>
 
-      <section class="menu-panel" aria-label="Main menu">
-        <nav class="menu" aria-label="Game options">
-          <button class="menu-button" type="button">Start New Game</button>
-          <button class="menu-button" type="button">Load Game</button>
-          <button class="menu-button" type="button" data-action="settings">
-            Settings
-          </button>
-          <button class="menu-button" type="button" data-action="quit">
-            Quit Game
-          </button>
-        </nav>
+      <section class="menu-panel" aria-label="Game menu">
+        <div class="menu-stage">
+          <nav class="menu is-active" data-menu="main" aria-label="Main menu">
+            <button
+              class="menu-button"
+              type="button"
+              data-action="open-start-menu"
+            >
+              Start New Game
+            </button>
+            <button class="menu-button" type="button">Load Game</button>
+            <button class="menu-button" type="button" data-action="settings">
+              Settings
+            </button>
+            <button class="menu-button" type="button" data-action="quit">
+              Quit Game
+            </button>
+          </nav>
+
+          <nav
+            class="menu"
+            data-menu="start-game"
+            aria-label="Start game options"
+            aria-hidden="true"
+            hidden
+          >
+            <button class="menu-button" type="button">
+              Start a new Career
+            </button>
+            <button class="menu-button" type="button">Quickstart</button>
+            <button class="menu-button" type="button">Scenario Mode</button>
+            <button
+              class="menu-button"
+              type="button"
+              data-action="back-to-main-menu"
+            >
+              Back To Main Menu
+            </button>
+          </nav>
+        </div>
       </section>
 
       <img

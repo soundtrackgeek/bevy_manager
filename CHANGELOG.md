@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0] - 2026-07-16
+
+### Added
+
+- Start-game menu with Start a new Career, Quickstart, Scenario Mode, and Back To Main Menu options.
+- Animated navigation between the main menu and start-game menu.
+
 ## [0.4.1] - 2026-07-16
 
 ### Fixed

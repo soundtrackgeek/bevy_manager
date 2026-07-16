@@ -19,6 +19,16 @@ const DISPLAY_MODE_KEY = "ultimate-manager.display-mode";
 const RESOLUTION_KEY = "ultimate-manager.resolution";
 
 const versionLabel = document.querySelector<HTMLElement>(".version");
+const mainMenu = document.querySelector<HTMLElement>('[data-menu="main"]');
+const startGameMenu = document.querySelector<HTMLElement>(
+  '[data-menu="start-game"]',
+);
+const openStartMenuButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="open-start-menu"]',
+);
+const backToMainMenuButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="back-to-main-menu"]',
+);
 const settingsButton = document.querySelector<HTMLButtonElement>(
   '[data-action="settings"]',
 );
@@ -65,6 +75,7 @@ let settingsTrigger: HTMLElement | null = null;
 let pendingUpdate: Update | null = null;
 let updateInstallationStarted = false;
 let updateToastHideTimer: number | null = null;
+let menuTransitionTimer: number | null = null;
 
 if (versionLabel) {
   versionLabel.textContent = `v${version}`;
@@ -141,6 +152,42 @@ const closeSettings = () => {
     settingsOverlay.hidden = true;
     settingsTrigger?.focus();
   }, 180);
+};
+
+const switchMenu = (
+  currentMenu: HTMLElement | null,
+  nextMenu: HTMLElement | null,
+  direction: "forward" | "back",
+) => {
+  if (!currentMenu || !nextMenu || currentMenu === nextMenu) return;
+
+  if (menuTransitionTimer !== null) {
+    window.clearTimeout(menuTransitionTimer);
+    menuTransitionTimer = null;
+  }
+
+  currentMenu.classList.remove("is-active");
+  currentMenu.classList.add(
+    direction === "forward" ? "is-leaving-left" : "is-leaving-right",
+  );
+  currentMenu.setAttribute("aria-hidden", "true");
+
+  nextMenu.hidden = false;
+  nextMenu.setAttribute("aria-hidden", "false");
+  nextMenu.classList.remove("is-leaving-left", "is-leaving-right");
+  nextMenu.classList.toggle("is-entering-from-left", direction === "back");
+
+  requestAnimationFrame(() => {
+    nextMenu.classList.remove("is-entering-from-left");
+    nextMenu.classList.add("is-active");
+    nextMenu.querySelector<HTMLButtonElement>(".menu-button")?.focus();
+  });
+
+  menuTransitionTimer = window.setTimeout(() => {
+    currentMenu.hidden = true;
+    currentMenu.classList.remove("is-leaving-left", "is-leaving-right");
+    menuTransitionTimer = null;
+  }, 220);
 };
 
 const showUpdateToast = (update: Update) => {
@@ -341,6 +388,14 @@ if (restoredDisplayPreferences && "__TAURI_INTERNALS__" in window) {
 }
 
 settingsButton?.addEventListener("click", openSettings);
+
+openStartMenuButton?.addEventListener("click", () => {
+  switchMenu(mainMenu, startGameMenu, "forward");
+});
+
+backToMainMenuButton?.addEventListener("click", () => {
+  switchMenu(startGameMenu, mainMenu, "back");
+});
 
 closeSettingsButtons.forEach((button) => {
   button.addEventListener("click", closeSettings);
