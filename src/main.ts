@@ -10,6 +10,11 @@ import "./styles.css";
 
 type DisplayMode = "windowed" | "borderless" | "fullscreen";
 
+type DisplayPreferences = {
+  displayMode: DisplayMode;
+  resolution: string;
+};
+
 const DISPLAY_MODE_KEY = "ultimate-manager.display-mode";
 const RESOLUTION_KEY = "ultimate-manager.resolution";
 
@@ -77,7 +82,7 @@ const getSelectedDisplayMode = (): DisplayMode => {
   return isDisplayMode(selectedValue) ? selectedValue : "windowed";
 };
 
-const restoreDisplayPreferences = () => {
+const restoreDisplayPreferences = (): DisplayPreferences | null => {
   const storedMode = localStorage.getItem(DISPLAY_MODE_KEY);
   const storedResolution = localStorage.getItem(RESOLUTION_KEY);
 
@@ -88,15 +93,23 @@ const restoreDisplayPreferences = () => {
     if (modeInput) modeInput.checked = true;
   }
 
-  if (
+  const hasStoredResolution =
     resolutionSelect &&
     storedResolution &&
     Array.from(resolutionSelect.options).some(
       (option) => option.value === storedResolution,
-    )
-  ) {
+    );
+
+  if (hasStoredResolution) {
     resolutionSelect.value = storedResolution;
   }
+
+  if (!isDisplayMode(storedMode) || !resolutionSelect) return null;
+
+  return {
+    displayMode: storedMode,
+    resolution: resolutionSelect.value,
+  };
 };
 
 const openSettings = () => {
@@ -251,11 +264,42 @@ const checkForUpdates = async () => {
   }
 };
 
+const applyWindowDisplaySettings = async ({
+  displayMode,
+  resolution,
+}: DisplayPreferences) => {
+  const [width, height] = resolution.split("x").map(Number);
+  if (!width || !height) throw new Error("The saved resolution is invalid.");
+
+  const appWindow = getCurrentWindow();
+
+  if (displayMode === "windowed") {
+    await appWindow.setFullscreen(false);
+    await appWindow.setDecorations(true);
+    await appWindow.setSize(new LogicalSize(width, height));
+    await appWindow.center();
+  } else if (displayMode === "borderless") {
+    await appWindow.setFullscreen(false);
+    await appWindow.setDecorations(false);
+
+    const monitor = await currentMonitor();
+    if (!monitor) throw new Error("No active monitor was found.");
+
+    await appWindow.setPosition(monitor.position);
+    await appWindow.setSize(monitor.size);
+  } else {
+    await appWindow.setDecorations(true);
+    await appWindow.setFullscreen(true);
+  }
+};
+
 const applyDisplaySettings = async () => {
   if (!resolutionSelect || !settingsStatus) return;
 
-  const displayMode = getSelectedDisplayMode();
-  const [width, height] = resolutionSelect.value.split("x").map(Number);
+  const preferences: DisplayPreferences = {
+    displayMode: getSelectedDisplayMode(),
+    resolution: resolutionSelect.value,
+  };
   const submitButton = settingsForm?.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   );
@@ -266,36 +310,16 @@ const applyDisplaySettings = async () => {
 
   try {
     if (!("__TAURI_INTERNALS__" in window)) {
-      localStorage.setItem(DISPLAY_MODE_KEY, displayMode);
-      localStorage.setItem(RESOLUTION_KEY, resolutionSelect.value);
+      localStorage.setItem(DISPLAY_MODE_KEY, preferences.displayMode);
+      localStorage.setItem(RESOLUTION_KEY, preferences.resolution);
       settingsStatus.textContent =
         "Saved for the desktop app. Window changes require Tauri.";
       return;
     }
 
-    const appWindow = getCurrentWindow();
-
-    if (displayMode === "windowed") {
-      await appWindow.setFullscreen(false);
-      await appWindow.setDecorations(true);
-      await appWindow.setSize(new LogicalSize(width, height));
-      await appWindow.center();
-    } else if (displayMode === "borderless") {
-      await appWindow.setFullscreen(false);
-      await appWindow.setDecorations(false);
-
-      const monitor = await currentMonitor();
-      if (!monitor) throw new Error("No active monitor was found.");
-
-      await appWindow.setPosition(monitor.position);
-      await appWindow.setSize(monitor.size);
-    } else {
-      await appWindow.setDecorations(true);
-      await appWindow.setFullscreen(true);
-    }
-
-    localStorage.setItem(DISPLAY_MODE_KEY, displayMode);
-    localStorage.setItem(RESOLUTION_KEY, resolutionSelect.value);
+    await applyWindowDisplaySettings(preferences);
+    localStorage.setItem(DISPLAY_MODE_KEY, preferences.displayMode);
+    localStorage.setItem(RESOLUTION_KEY, preferences.resolution);
     settingsStatus.textContent = "Display settings applied.";
   } catch (error) {
     settingsStatus.classList.add("is-error");
@@ -308,7 +332,13 @@ const applyDisplaySettings = async () => {
   }
 };
 
-restoreDisplayPreferences();
+const restoredDisplayPreferences = restoreDisplayPreferences();
+
+if (restoredDisplayPreferences && "__TAURI_INTERNALS__" in window) {
+  void applyWindowDisplaySettings(restoredDisplayPreferences).catch((error) => {
+    console.error("Could not restore saved display settings", error);
+  });
+}
 
 settingsButton?.addEventListener("click", openSettings);
 

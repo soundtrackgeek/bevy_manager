@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.1] - 2026-07-16
+
+### Fixed
+
+- Saved display mode and resolution are now reapplied whenever Ultimate Manager starts.
+
 ## [0.4.0] - 2026-07-16
 
 ### Added
