@@ -3,6 +3,8 @@ import {
   getCurrentWindow,
   LogicalSize,
 } from "@tauri-apps/api/window";
+import { relaunch } from "@tauri-apps/plugin-process";
+import { check, type Update } from "@tauri-apps/plugin-updater";
 import { version } from "../package.json";
 import "./styles.css";
 
@@ -22,15 +24,42 @@ const settingsOverlay = document.querySelector<HTMLElement>("[data-settings]");
 const settingsForm = document.querySelector<HTMLFormElement>(
   "[data-settings-form]",
 );
-const resolutionSelect = document.querySelector<HTMLSelectElement>("#resolution");
+const resolutionSelect =
+  document.querySelector<HTMLSelectElement>("#resolution");
 const settingsStatus = document.querySelector<HTMLElement>(
   "[data-settings-status]",
 );
 const closeSettingsButtons = document.querySelectorAll<HTMLButtonElement>(
   '[data-action="close-settings"]',
 );
+const updateToast = document.querySelector<HTMLElement>("[data-update-toast]");
+const updateTitle = document.querySelector<HTMLElement>("[data-update-title]");
+const updateMessage = document.querySelector<HTMLElement>(
+  "[data-update-message]",
+);
+const updateProgress = document.querySelector<HTMLElement>(
+  "[data-update-progress]",
+);
+const updateProgressBar = document.querySelector<HTMLElement>(
+  "[data-update-progress-bar]",
+);
+const updateProgressValue = document.querySelector<HTMLElement>(
+  "[data-update-progress-value]",
+);
+const updateProgressLabel = document.querySelector<HTMLElement>(
+  "[data-update-progress-label]",
+);
+const installUpdateButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="install-update"]',
+);
+const dismissUpdateButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="dismiss-update"]',
+);
 
 let settingsTrigger: HTMLElement | null = null;
+let pendingUpdate: Update | null = null;
+let updateInstallationStarted = false;
+let updateToastHideTimer: number | null = null;
 
 if (versionLabel) {
   versionLabel.textContent = `v${version}`;
@@ -76,9 +105,9 @@ const openSettings = () => {
   settingsTrigger = document.activeElement as HTMLElement | null;
   settingsOverlay.hidden = false;
   settingsOverlay.setAttribute("aria-hidden", "false");
-  document.querySelector<HTMLElement>(".opening-screen")?.classList.add(
-    "settings-open",
-  );
+  document
+    .querySelector<HTMLElement>(".opening-screen")
+    ?.classList.add("settings-open");
 
   requestAnimationFrame(() => {
     settingsOverlay.classList.add("is-open");
@@ -91,14 +120,135 @@ const closeSettings = () => {
 
   settingsOverlay.classList.remove("is-open");
   settingsOverlay.setAttribute("aria-hidden", "true");
-  document.querySelector<HTMLElement>(".opening-screen")?.classList.remove(
-    "settings-open",
-  );
+  document
+    .querySelector<HTMLElement>(".opening-screen")
+    ?.classList.remove("settings-open");
 
   window.setTimeout(() => {
     settingsOverlay.hidden = true;
     settingsTrigger?.focus();
   }, 180);
+};
+
+const showUpdateToast = (update: Update) => {
+  if (!updateToast || !updateTitle || !updateMessage) return;
+
+  if (updateToastHideTimer !== null) {
+    window.clearTimeout(updateToastHideTimer);
+    updateToastHideTimer = null;
+  }
+
+  updateTitle.textContent = "Update available";
+  updateMessage.textContent = `Ultimate Manager v${update.version} is ready to install.`;
+  updateToast.hidden = false;
+  updateToast.setAttribute("aria-hidden", "false");
+
+  requestAnimationFrame(() => updateToast.classList.add("is-visible"));
+};
+
+const hideUpdateToast = () => {
+  if (!updateToast || updateInstallationStarted) return;
+
+  updateToast.classList.remove("is-visible");
+  updateToast.setAttribute("aria-hidden", "true");
+  updateToastHideTimer = window.setTimeout(() => {
+    updateToast.hidden = true;
+    updateToastHideTimer = null;
+  }, 200);
+};
+
+const setUpdateProgress = (downloaded: number, total?: number) => {
+  if (!updateProgressBar || !updateProgressValue || !updateProgressLabel)
+    return;
+
+  if (total && total > 0) {
+    const percentage = Math.min(100, Math.round((downloaded / total) * 100));
+    updateProgressBar.classList.remove("is-indeterminate");
+    updateProgressBar.setAttribute("aria-valuenow", percentage.toString());
+    updateProgressValue.style.width = `${percentage}%`;
+    updateProgressLabel.textContent = `Downloading… ${percentage}%`;
+  } else {
+    updateProgressBar.classList.add("is-indeterminate");
+    updateProgressBar.removeAttribute("aria-valuenow");
+    updateProgressValue.style.width = "38%";
+    updateProgressLabel.textContent = "Downloading update…";
+  }
+};
+
+const installPendingUpdate = async () => {
+  if (
+    !pendingUpdate ||
+    updateInstallationStarted ||
+    !updateTitle ||
+    !updateMessage ||
+    !installUpdateButton ||
+    !dismissUpdateButton ||
+    !updateProgress ||
+    !updateProgressBar ||
+    !updateProgressValue ||
+    !updateProgressLabel
+  ) {
+    return;
+  }
+
+  updateInstallationStarted = true;
+  installUpdateButton.disabled = true;
+  installUpdateButton.textContent = "Downloading…";
+  dismissUpdateButton.disabled = true;
+  updateTitle.textContent = "Downloading update";
+  updateMessage.textContent = `Ultimate Manager v${pendingUpdate.version} will restart when it is ready.`;
+  updateProgress.hidden = false;
+  updateProgressBar.classList.add("is-indeterminate");
+  updateProgressBar.removeAttribute("aria-valuenow");
+  updateProgressValue.style.width = "38%";
+  updateProgressLabel.textContent = "Preparing download…";
+
+  let downloadedBytes = 0;
+  let totalBytes: number | undefined;
+
+  try {
+    await pendingUpdate.downloadAndInstall((event) => {
+      if (event.event === "Started") {
+        totalBytes = event.data.contentLength;
+        setUpdateProgress(0, totalBytes);
+      } else if (event.event === "Progress") {
+        downloadedBytes += event.data.chunkLength;
+        setUpdateProgress(downloadedBytes, totalBytes);
+      } else {
+        updateProgressBar.classList.remove("is-indeterminate");
+        updateProgressBar.setAttribute("aria-valuenow", "100");
+        updateProgressValue.style.width = "100%";
+        updateProgressLabel.textContent = "Installing update…";
+        installUpdateButton.textContent = "Installing…";
+      }
+    });
+
+    updateTitle.textContent = "Restarting Ultimate Manager";
+    updateMessage.textContent = "The update is installed. Restarting now…";
+    updateProgressLabel.textContent = "Update installed";
+    await relaunch();
+  } catch (error) {
+    console.error("Could not install the update", error);
+    updateInstallationStarted = false;
+    updateTitle.textContent = "Update failed";
+    updateMessage.textContent =
+      "The update could not be installed. Check your connection and try again.";
+    updateProgress.hidden = true;
+    installUpdateButton.disabled = false;
+    installUpdateButton.textContent = "Try again";
+    dismissUpdateButton.disabled = false;
+  }
+};
+
+const checkForUpdates = async () => {
+  if (!("__TAURI_INTERNALS__" in window)) return;
+
+  try {
+    pendingUpdate = await check({ timeout: 15_000 });
+    if (pendingUpdate) showUpdateToast(pendingUpdate);
+  } catch (error) {
+    console.error("Could not check for updates", error);
+  }
 };
 
 const applyDisplaySettings = async () => {
@@ -166,13 +316,26 @@ closeSettingsButtons.forEach((button) => {
   button.addEventListener("click", closeSettings);
 });
 
+installUpdateButton?.addEventListener("click", () => {
+  void installPendingUpdate();
+});
+
+dismissUpdateButton?.addEventListener("click", () => {
+  hideUpdateToast();
+  void pendingUpdate?.close();
+  pendingUpdate = null;
+});
+
 settingsForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   await applyDisplaySettings();
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && settingsOverlay?.classList.contains("is-open")) {
+  if (
+    event.key === "Escape" &&
+    settingsOverlay?.classList.contains("is-open")
+  ) {
     closeSettings();
   }
 });
@@ -180,3 +343,9 @@ document.addEventListener("keydown", (event) => {
 quitButton?.addEventListener("click", async () => {
   await getCurrentWindow().close();
 });
+
+if (document.readyState === "complete") {
+  void checkForUpdates();
+} else {
+  window.addEventListener("load", () => void checkForUpdates(), { once: true });
+}

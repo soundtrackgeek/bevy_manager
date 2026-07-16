@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Ultimate Manager",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "identifier": "com.soundtrackgeek.bevymanager",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -27,6 +27,7 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": ["nsis"],
     "icon": [
       "icons/32x32.png",
@@ -35,5 +36,16 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU2NDAxQkQwMUJGRUNERkYKUldUL3pmNGIwQnRBNXBBOVl3RzhKb1U1YVJGajZHQXB5M2ZtV3doQnRveWdsbjR6SWMyTjByR20K",
+      "endpoints": [
+        "https://github.com/soundtrackgeek/bevy_manager/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

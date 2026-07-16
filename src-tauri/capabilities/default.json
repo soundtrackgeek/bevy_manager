@@ -10,6 +10,8 @@
     "core:window:allow-set-decorations",
     "core:window:allow-set-fullscreen",
     "core:window:allow-set-position",
-    "core:window:allow-set-size"
+    "core:window:allow-set-size",
+    "process:allow-restart",
+    "updater:default"
   ]
 }

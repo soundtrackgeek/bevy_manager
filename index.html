@@ -19,7 +19,9 @@
           <button class="menu-button" type="button" data-action="settings">
             Settings
           </button>
-          <button class="menu-button" type="button" data-action="quit">Quit Game</button>
+          <button class="menu-button" type="button" data-action="quit">
+            Quit Game
+          </button>
         </nav>
       </section>
 
@@ -29,12 +31,7 @@
         alt="Ultimate Manager"
       />
 
-      <section
-        class="settings-overlay"
-        data-settings
-        aria-hidden="true"
-        hidden
-      >
+      <section class="settings-overlay" data-settings aria-hidden="true" hidden>
         <form
           class="settings-dialog"
           data-settings-form
@@ -74,7 +71,9 @@
                       checked
                     />
                     <span class="display-mode-name">Windowed</span>
-                    <span class="display-mode-description">Resizable window</span>
+                    <span class="display-mode-description"
+                      >Resizable window</span
+                    >
                   </label>
 
                   <label class="display-mode-option">
@@ -84,7 +83,9 @@
                       value="borderless"
                     />
                     <span class="display-mode-name">Fullscreen Windowed</span>
-                    <span class="display-mode-description">Borderless display</span>
+                    <span class="display-mode-description"
+                      >Borderless display</span
+                    >
                   </label>
 
                   <label class="display-mode-option">
@@ -94,7 +95,9 @@
                       value="fullscreen"
                     />
                     <span class="display-mode-name">Fullscreen</span>
-                    <span class="display-mode-description">Native fullscreen</span>
+                    <span class="display-mode-description"
+                      >Native fullscreen</span
+                    >
                   </label>
                 </div>
               </fieldset>
@@ -123,7 +126,11 @@
           </div>
 
           <footer class="settings-footer">
-            <p class="settings-status" data-settings-status aria-live="polite"></p>
+            <p
+              class="settings-status"
+              data-settings-status
+              aria-live="polite"
+            ></p>
             <div class="settings-actions">
               <button
                 class="settings-button settings-button-secondary"
@@ -132,13 +139,79 @@
               >
                 Back
               </button>
-              <button class="settings-button settings-button-primary" type="submit">
+              <button
+                class="settings-button settings-button-primary"
+                type="submit"
+              >
                 Apply Changes
               </button>
             </div>
           </footer>
         </form>
       </section>
+
+      <aside
+        class="update-toast"
+        data-update-toast
+        aria-labelledby="update-toast-title"
+        aria-hidden="true"
+        hidden
+      >
+        <div class="update-toast-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 20h14" />
+          </svg>
+        </div>
+
+        <div class="update-toast-content">
+          <p
+            class="update-toast-title"
+            id="update-toast-title"
+            data-update-title
+          >
+            Update available
+          </p>
+          <p class="update-toast-message" data-update-message></p>
+
+          <div class="update-progress" data-update-progress hidden>
+            <div
+              class="update-progress-track"
+              data-update-progress-bar
+              role="progressbar"
+              aria-label="Update download progress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <span
+                class="update-progress-value"
+                data-update-progress-value
+              ></span>
+            </div>
+            <span class="update-progress-label" data-update-progress-label>
+              Preparing download…
+            </span>
+          </div>
+
+          <button
+            class="update-toast-action"
+            type="button"
+            data-action="install-update"
+          >
+            Update now
+          </button>
+        </div>
+
+        <button
+          class="update-toast-close"
+          type="button"
+          data-action="dismiss-update"
+          aria-label="Dismiss update"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6 18 18M18 6 6 18" />
+          </svg>
+        </button>
+      </aside>
 
       <p class="version" aria-label="Application version"></p>
     </main>

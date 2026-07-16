@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0] - 2026-07-16
+
+### Added
+
+- Automatic update check whenever Ultimate Manager starts.
+- In-game update notification with download progress, retry handling, installation, and restart.
+- Signed updater bundles and `latest.json` metadata in GitHub Releases.
+
 ## [0.3.2] - 2026-07-16
 
 ### Changed

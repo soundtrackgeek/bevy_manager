@@ -1,7 +1,6 @@
 :root {
   font-family:
-    "Segoe UI Variable Display", "Segoe UI", Inter, Helvetica, Arial,
-    sans-serif;
+    "Segoe UI Variable Display", "Segoe UI", Inter, Helvetica, Arial, sans-serif;
   color: #f7fbff;
   background: #031429;
   font-synthesis: none;
@@ -526,6 +525,226 @@ input {
   box-shadow: 0 0 1.2rem rgba(0, 255, 91, 0.32);
 }
 
+.update-toast[hidden] {
+  display: none;
+}
+
+.update-toast {
+  position: absolute;
+  z-index: 20;
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  display: grid;
+  width: min(27rem, calc(100vw - 2rem));
+  padding: 1.15rem 1.15rem 1.15rem 1.1rem;
+  overflow: hidden;
+  border: 1px solid rgba(81, 177, 239, 0.78);
+  border-radius: 0.55rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  color: #f7fbff;
+  background:
+    linear-gradient(145deg, rgba(7, 35, 63, 0.98), rgba(1, 17, 37, 0.99)),
+    #03152d;
+  box-shadow:
+    0 1.25rem 3.5rem rgba(0, 0, 0, 0.5),
+    0 0 1.8rem rgba(35, 136, 210, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.8rem) scale(0.985);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.update-toast::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      145deg,
+      transparent 0 58%,
+      rgba(77, 166, 229, 0.1) 58.2%,
+      transparent 58.45%
+    ),
+    linear-gradient(
+      35deg,
+      transparent 0 78%,
+      rgba(53, 135, 197, 0.1) 78.2%,
+      transparent 78.45%
+    );
+  content: "";
+  pointer-events: none;
+}
+
+.update-toast.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.update-toast-icon {
+  position: relative;
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid rgba(71, 255, 130, 0.72);
+  border-radius: 50%;
+  color: #73ff9d;
+  background: rgba(0, 111, 43, 0.34);
+  box-shadow: 0 0 1rem rgba(0, 255, 91, 0.16);
+  place-items: center;
+}
+
+.update-toast-icon svg,
+.update-toast-close svg {
+  width: 1.3rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.update-toast-content {
+  position: relative;
+  min-width: 0;
+}
+
+.update-toast-title,
+.update-toast-message {
+  margin: 0;
+}
+
+.update-toast-title {
+  padding-right: 0.25rem;
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.update-toast-message {
+  margin-top: 0.28rem;
+  color: rgba(211, 229, 245, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.update-toast-close {
+  position: relative;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.3rem;
+  color: rgba(211, 231, 248, 0.7);
+  background: transparent;
+  cursor: pointer;
+  place-items: center;
+  transition:
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.update-toast-close svg {
+  width: 1rem;
+}
+
+.update-toast-close:hover,
+.update-toast-close:focus-visible {
+  color: #ffffff;
+  background: rgba(76, 164, 226, 0.18);
+  outline: none;
+}
+
+.update-toast-close:disabled {
+  cursor: wait;
+  opacity: 0.35;
+}
+
+.update-toast-action {
+  min-height: 2.55rem;
+  padding: 0.55rem 1rem;
+  margin-top: 0.9rem;
+  border: 1px solid #47ff82;
+  border-radius: 0.32rem;
+  color: #ffffff;
+  background: linear-gradient(180deg, #00aa3d, #006c29);
+  box-shadow: 0 0 0.9rem rgba(0, 255, 91, 0.18);
+  font-size: 0.84rem;
+  font-weight: 740;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.update-toast-action:hover,
+.update-toast-action:focus-visible {
+  background: linear-gradient(180deg, #00bd46, #007d30);
+  box-shadow: 0 0 1.15rem rgba(0, 255, 91, 0.3);
+  outline: none;
+  transform: translateY(-0.06rem);
+}
+
+.update-toast-action:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+}
+
+.update-progress {
+  margin-top: 0.8rem;
+}
+
+.update-progress[hidden] {
+  display: none;
+}
+
+.update-progress-track {
+  position: relative;
+  height: 0.32rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(116, 167, 205, 0.2);
+}
+
+.update-progress-value {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #00a83c, #68ff95);
+  box-shadow: 0 0 0.7rem rgba(0, 255, 91, 0.38);
+  transition: width 160ms ease;
+}
+
+.update-progress-track.is-indeterminate .update-progress-value {
+  animation: update-progress 1.2s ease-in-out infinite alternate;
+}
+
+.update-progress-label {
+  display: block;
+  margin-top: 0.35rem;
+  color: rgba(184, 213, 236, 0.68);
+  font-size: 0.7rem;
+  font-weight: 620;
+  line-height: 1.2;
+}
+
+@keyframes update-progress {
+  from {
+    transform: translateX(-75%);
+  }
+
+  to {
+    transform: translateX(165%);
+  }
+}
+
 .version {
   position: absolute;
   z-index: 2;
@@ -588,6 +807,11 @@ input {
   .settings-actions {
     justify-content: flex-end;
   }
+
+  .update-toast {
+    right: 1rem;
+    bottom: 1rem;
+  }
 }
 
 @media (max-height: 600px) {
@@ -641,5 +865,16 @@ input {
   .display-mode-option,
   .settings-button {
     transition: none;
+  }
+
+  .update-toast,
+  .update-toast-action,
+  .update-toast-close,
+  .update-progress-value {
+    transition: none;
+  }
+
+  .update-progress-track.is-indeterminate .update-progress-value {
+    animation: none;
   }
 }

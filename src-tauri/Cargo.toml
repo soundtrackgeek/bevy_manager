@@ -1,6 +1,6 @@
 [package]
 name = "bevy-manager"
-version = "0.3.2"
+version = "0.4.0"
 description = "Ultimate Manager, a football management game built with Rust and Tauri 2"
 authors = ["soundtrackgeek"]
 edition = "2024"
@@ -18,4 +18,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+serde_json = "1.0.150"
 tauri = { version = "2", features = [] }
+tauri-plugin-process = "2"
+tauri-plugin-updater = "2"
