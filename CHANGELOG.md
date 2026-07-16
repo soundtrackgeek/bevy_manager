@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.2] - 2026-07-16
+
+### Changed
+
+- Updated the development workflow so pushes no longer wait for GitHub Actions to finish.
+
 ## [0.3.1] - 2026-07-16
 
 ### Added

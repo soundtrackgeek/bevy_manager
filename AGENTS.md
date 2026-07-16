@@ -20,3 +20,4 @@
 
 4. **Complete post-push cleanup**:
    - After every push, run `cargo clean` from the `src-tauri` folder as the final required step
+   - Do not wait for, monitor, or follow the GitHub Actions run after pushing; let CI complete asynchronously
