@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.2] - 2026-07-16
+
+### Changed
+
+- Replaced the default application artwork with the selected Ultimate Manager shield icon across Windows icon sizes.
+
 ## [0.6.1] - 2026-07-16
 
 ### Added
