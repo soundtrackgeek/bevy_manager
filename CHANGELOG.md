@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.0] - 2026-07-16
+
+### Added
+
+- Selected Ultimate Manager logo on the opening screen.
+
+### Changed
+
+- Updated the visible application branding from Bevy Manager to Ultimate Manager.
+
 ## [0.1.0] - 2026-07-15
 
 ### Added
