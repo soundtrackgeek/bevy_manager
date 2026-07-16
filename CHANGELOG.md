@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.1] - 2026-07-16
+
+### Added
+
+- Back navigation from the playable-country picker to the start-game menu.
+
 ## [0.6.0] - 2026-07-16
 
 ### Added

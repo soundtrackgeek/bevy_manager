@@ -35,6 +35,9 @@ const openCountryMenuButton = document.querySelector<HTMLButtonElement>(
 const backToMainMenuButton = document.querySelector<HTMLButtonElement>(
   '[data-action="back-to-main-menu"]',
 );
+const backToStartMenuButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="back-to-start-menu"]',
+);
 const englandCountryCheckbox = document.querySelector<HTMLInputElement>(
   '[data-country="england"]',
 );
@@ -415,6 +418,10 @@ openCountryMenuButton?.addEventListener("click", () => {
 
 backToMainMenuButton?.addEventListener("click", () => {
   switchMenu(startGameMenu, mainMenu, "back");
+});
+
+backToStartMenuButton?.addEventListener("click", () => {
+  switchMenu(countryMenu, startGameMenu, "back");
 });
 
 englandCountryCheckbox?.addEventListener("change", () => {

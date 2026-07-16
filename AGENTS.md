@@ -21,3 +21,8 @@
 4. **Complete post-push cleanup**:
    - After every push, run `cargo clean` from the `src-tauri` folder as the final required step
    - Do not wait for, monitor, or follow the GitHub Actions run after pushing; let CI complete asynchronously
+
+## Menu Navigation
+
+- Every menu other than the root main menu must include a working Back button.
+- Back must return to the immediately previous menu unless a specific flow explicitly requires another destination.
