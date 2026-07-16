@@ -38,7 +38,11 @@
             aria-hidden="true"
             hidden
           >
-            <button class="menu-button" type="button">
+            <button
+              class="menu-button"
+              type="button"
+              data-action="open-country-menu"
+            >
               Start a new Career
             </button>
             <button class="menu-button" type="button">Quickstart</button>
@@ -51,6 +55,89 @@
               Back To Main Menu
             </button>
           </nav>
+
+          <section
+            class="menu country-menu"
+            data-menu="countries"
+            aria-labelledby="country-menu-title"
+            aria-hidden="true"
+            hidden
+          >
+            <h2 class="country-menu-title" id="country-menu-title">
+              Choose playable countries
+            </h2>
+
+            <div class="country-list" role="group" aria-label="Countries">
+              <label class="country-option">
+                <input
+                  type="checkbox"
+                  name="playable-country"
+                  value="england"
+                  data-country="england"
+                  data-menu-focus
+                />
+                <span class="country-check" aria-hidden="true">
+                  <svg viewBox="0 0 16 16">
+                    <path d="m3.5 8.4 2.8 2.8 6.2-6.4" />
+                  </svg>
+                </span>
+                <span>England</span>
+              </label>
+
+              <label class="country-option is-disabled">
+                <input
+                  type="checkbox"
+                  name="playable-country"
+                  value="italy"
+                  disabled
+                />
+                <span class="country-check" aria-hidden="true"></span>
+                <span>Italy</span>
+              </label>
+
+              <label class="country-option is-disabled">
+                <input
+                  type="checkbox"
+                  name="playable-country"
+                  value="norway"
+                  disabled
+                />
+                <span class="country-check" aria-hidden="true"></span>
+                <span>Norway</span>
+              </label>
+
+              <label class="country-option is-disabled">
+                <input
+                  type="checkbox"
+                  name="playable-country"
+                  value="spain"
+                  disabled
+                />
+                <span class="country-check" aria-hidden="true"></span>
+                <span>Spain</span>
+              </label>
+
+              <label class="country-option is-disabled">
+                <input
+                  type="checkbox"
+                  name="playable-country"
+                  value="france"
+                  disabled
+                />
+                <span class="country-check" aria-hidden="true"></span>
+                <span>France</span>
+              </label>
+            </div>
+
+            <button
+              class="menu-button country-next-button"
+              type="button"
+              data-action="country-next"
+              disabled
+            >
+              Next
+            </button>
+          </section>
         </div>
       </section>
 

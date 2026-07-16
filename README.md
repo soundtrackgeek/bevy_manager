@@ -8,8 +8,9 @@ Ultimate Manager is a football management game built with Rust and Tauri 2.
 - Branded Ultimate Manager title treatment over the stadium skyline.
 - Main menu actions for starting a new game, loading a game, settings, and quitting.
 - Start New Game opens a second menu for Start a new Career, Quickstart, and Scenario Mode, with a working return to the main menu.
+- Start a new Career opens a playable-country picker with England available; Italy, Norway, Spain, and France are shown but disabled.
 - Persistent display settings for Windowed, Fullscreen Windowed, and Fullscreen modes, with common resolution choices restored whenever the game starts.
-- The Settings button opens the display options and the Quit Game button closes the application; Load Game and the three new-game modes remain intentionally inactive for now.
+- The Settings button opens the display options and the Quit Game button closes the application; Load Game, Quickstart, Scenario Mode, and the country picker's Next step remain intentionally inactive for now.
 - Automatic startup update checks with an in-game download and install notification.
 - Signed updates install from inside the game and restart Ultimate Manager when finished.
 - Application version displayed in the bottom-left corner.

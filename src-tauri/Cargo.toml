@@ -1,6 +1,6 @@
 [package]
 name = "bevy-manager"
-version = "0.5.0"
+version = "0.6.0"
 description = "Ultimate Manager, a football management game built with Rust and Tauri 2"
 authors = ["soundtrackgeek"]
 edition = "2024"

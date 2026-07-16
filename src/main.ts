@@ -23,11 +23,23 @@ const mainMenu = document.querySelector<HTMLElement>('[data-menu="main"]');
 const startGameMenu = document.querySelector<HTMLElement>(
   '[data-menu="start-game"]',
 );
+const countryMenu = document.querySelector<HTMLElement>(
+  '[data-menu="countries"]',
+);
 const openStartMenuButton = document.querySelector<HTMLButtonElement>(
   '[data-action="open-start-menu"]',
 );
+const openCountryMenuButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="open-country-menu"]',
+);
 const backToMainMenuButton = document.querySelector<HTMLButtonElement>(
   '[data-action="back-to-main-menu"]',
+);
+const englandCountryCheckbox = document.querySelector<HTMLInputElement>(
+  '[data-country="england"]',
+);
+const countryNextButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="country-next"]',
 );
 const settingsButton = document.querySelector<HTMLButtonElement>(
   '[data-action="settings"]',
@@ -180,7 +192,11 @@ const switchMenu = (
   requestAnimationFrame(() => {
     nextMenu.classList.remove("is-entering-from-left");
     nextMenu.classList.add("is-active");
-    nextMenu.querySelector<HTMLButtonElement>(".menu-button")?.focus();
+    nextMenu
+      .querySelector<HTMLElement>(
+        "[data-menu-focus], .menu-button:not(:disabled)",
+      )
+      ?.focus();
   });
 
   menuTransitionTimer = window.setTimeout(() => {
@@ -393,8 +409,18 @@ openStartMenuButton?.addEventListener("click", () => {
   switchMenu(mainMenu, startGameMenu, "forward");
 });
 
+openCountryMenuButton?.addEventListener("click", () => {
+  switchMenu(startGameMenu, countryMenu, "forward");
+});
+
 backToMainMenuButton?.addEventListener("click", () => {
   switchMenu(startGameMenu, mainMenu, "back");
+});
+
+englandCountryCheckbox?.addEventListener("change", () => {
+  if (countryNextButton) {
+    countryNextButton.disabled = !englandCountryCheckbox.checked;
+  }
 });
 
 closeSettingsButtons.forEach((button) => {

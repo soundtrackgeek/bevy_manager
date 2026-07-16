@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0] - 2026-07-16
+
+### Added
+
+- Playable-country selection for new careers, with England available and Italy, Norway, Spain, and France shown as disabled.
+- Next control that becomes available after England is selected.
+
 ## [0.5.0] - 2026-07-16
 
 ### Added
