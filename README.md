@@ -7,7 +7,8 @@ Ultimate Manager is a football management game built with Rust and Tauri 2.
 - Cinematic stadium opening screen with a faceted diagonal menu panel.
 - Branded Ultimate Manager title treatment over the stadium skyline.
 - Main menu actions for starting a new game, loading a game, settings, and quitting.
-- The Quit Game button closes the application; the remaining menu actions are intentionally inactive for now.
+- Display settings for Windowed, Fullscreen Windowed, and Fullscreen modes, with common resolution choices.
+- The Settings button opens the display options and the Quit Game button closes the application; Start New Game and Load Game remain intentionally inactive for now.
 - Application version displayed in the bottom-left corner.
 
 ## Development

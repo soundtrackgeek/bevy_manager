@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0] - 2026-07-16
+
+### Added
+
+- Display settings opened from the main menu.
+- Windowed, Fullscreen Windowed, and Fullscreen display modes.
+- Selectable 720p, 900p, 1080p, 1440p, and 4K window resolutions.
+
 ## [0.2.0] - 2026-07-16
 
 ### Added

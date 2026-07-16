@@ -16,7 +16,9 @@
         <nav class="menu" aria-label="Game options">
           <button class="menu-button" type="button">Start New Game</button>
           <button class="menu-button" type="button">Load Game</button>
-          <button class="menu-button" type="button">Settings</button>
+          <button class="menu-button" type="button" data-action="settings">
+            Settings
+          </button>
           <button class="menu-button" type="button" data-action="quit">Quit Game</button>
         </nav>
       </section>
@@ -26,6 +28,117 @@
         src="/src/assets/ultimate-manager-logo.png"
         alt="Ultimate Manager"
       />
+
+      <section
+        class="settings-overlay"
+        data-settings
+        aria-hidden="true"
+        hidden
+      >
+        <form
+          class="settings-dialog"
+          data-settings-form
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="settings-title"
+        >
+          <header class="settings-header">
+            <h2 id="settings-title">Settings</h2>
+            <button
+              class="settings-close"
+              type="button"
+              data-action="close-settings"
+              aria-label="Close settings"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6 18 18M18 6 6 18" />
+              </svg>
+            </button>
+          </header>
+
+          <div class="settings-content">
+            <section class="settings-section" aria-labelledby="display-title">
+              <div class="settings-section-heading">
+                <h3 id="display-title">Display</h3>
+                <p>Choose how Ultimate Manager appears on your monitor.</p>
+              </div>
+
+              <fieldset class="settings-fieldset">
+                <legend>Display Mode</legend>
+                <div class="display-mode-options">
+                  <label class="display-mode-option">
+                    <input
+                      type="radio"
+                      name="display-mode"
+                      value="windowed"
+                      checked
+                    />
+                    <span class="display-mode-name">Windowed</span>
+                    <span class="display-mode-description">Resizable window</span>
+                  </label>
+
+                  <label class="display-mode-option">
+                    <input
+                      type="radio"
+                      name="display-mode"
+                      value="borderless"
+                    />
+                    <span class="display-mode-name">Fullscreen Windowed</span>
+                    <span class="display-mode-description">Borderless display</span>
+                  </label>
+
+                  <label class="display-mode-option">
+                    <input
+                      type="radio"
+                      name="display-mode"
+                      value="fullscreen"
+                    />
+                    <span class="display-mode-name">Fullscreen</span>
+                    <span class="display-mode-description">Native fullscreen</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <label class="settings-field" for="resolution">
+                <span>
+                  <span class="settings-field-label">Resolution</span>
+                  <span class="settings-field-description">
+                    Used for Windowed mode
+                  </span>
+                </span>
+                <span class="select-shell">
+                  <select id="resolution" name="resolution">
+                    <option value="1280x720">1280 × 720</option>
+                    <option value="1600x900">1600 × 900</option>
+                    <option value="1920x1080">1920 × 1080</option>
+                    <option value="2560x1440">2560 × 1440</option>
+                    <option value="3840x2160">3840 × 2160</option>
+                  </select>
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m5 7.5 5 5 5-5" />
+                  </svg>
+                </span>
+              </label>
+            </section>
+          </div>
+
+          <footer class="settings-footer">
+            <p class="settings-status" data-settings-status aria-live="polite"></p>
+            <div class="settings-actions">
+              <button
+                class="settings-button settings-button-secondary"
+                type="button"
+                data-action="close-settings"
+              >
+                Back
+              </button>
+              <button class="settings-button settings-button-primary" type="submit">
+                Apply Changes
+              </button>
+            </div>
+          </footer>
+        </form>
+      </section>
 
       <p class="version" aria-label="Application version"></p>
     </main>
