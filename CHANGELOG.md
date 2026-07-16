@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.1] - 2026-07-16
+
+### Added
+
+- GitHub Actions workflow that creates a Windows release for every push to `master`.
+- Installable NSIS `.exe` attached to each versioned GitHub Release.
+
+### Changed
+
+- Windows bundles now target the NSIS installer format.
+
 ## [0.3.0] - 2026-07-16
 
 ### Added

@@ -30,3 +30,13 @@ Build the application:
 ```powershell
 npm run tauri build
 ```
+
+## Releases
+
+Every push to `master` runs the Windows release workflow. It builds an NSIS
+installer and publishes it as an installable `.exe` on a GitHub Release tagged
+with the application version, such as `v0.3.1`.
+
+Each commit must use a new semantic version in `package.json`,
+`src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml` so the workflow can
+create a unique release.

@@ -1,0 +1,58 @@
+name: Release Windows Installer
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  release-windows:
+    name: Build and release Windows installer
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build data
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target/release/.fingerprint
+            src-tauri/target/release/build
+            src-tauri/target/release/deps
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build installer and create GitHub Release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v__VERSION__
+          releaseName: Ultimate Manager v__VERSION__
+          releaseBody: Download the Windows setup executable below to install Ultimate Manager.
+          releaseDraft: false
+          prerelease: false
+          generateReleaseNotes: true
+          releaseAssetNamePattern: Ultimate-Manager_[version]_[arch][setup].[ext]
+          retryAttempts: 2
+          args: --bundles nsis
