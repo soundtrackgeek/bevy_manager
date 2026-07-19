@@ -15,6 +15,131 @@ type DisplayPreferences = {
   resolution: string;
 };
 
+type Division = {
+  id: string;
+  name: string;
+  clubs: readonly string[];
+};
+
+const ENGLISH_DIVISIONS: readonly Division[] = [
+  {
+    id: "premier-league",
+    name: "Premier League",
+    clubs: [
+      "AFC Bournemouth",
+      "Arsenal",
+      "Aston Villa",
+      "Brentford",
+      "Brighton & Hove Albion",
+      "Chelsea",
+      "Coventry City",
+      "Crystal Palace",
+      "Everton",
+      "Fulham",
+      "Hull City",
+      "Ipswich Town",
+      "Leeds United",
+      "Liverpool",
+      "Manchester City",
+      "Manchester United",
+      "Newcastle United",
+      "Nottingham Forest",
+      "Sunderland",
+      "Tottenham Hotspur",
+    ],
+  },
+  {
+    id: "championship",
+    name: "Championship",
+    clubs: [
+      "Birmingham City",
+      "Blackburn Rovers",
+      "Bolton Wanderers",
+      "Bristol City",
+      "Burnley",
+      "Cardiff City",
+      "Charlton Athletic",
+      "Derby County",
+      "Lincoln City",
+      "Middlesbrough",
+      "Millwall",
+      "Norwich City",
+      "Portsmouth",
+      "Preston North End",
+      "Queens Park Rangers",
+      "Sheffield United",
+      "Southampton",
+      "Stoke City",
+      "Swansea City",
+      "Watford",
+      "West Bromwich Albion",
+      "West Ham United",
+      "Wolverhampton Wanderers",
+      "Wrexham",
+    ],
+  },
+  {
+    id: "league-one",
+    name: "League One",
+    clubs: [
+      "AFC Wimbledon",
+      "Barnsley",
+      "Blackpool",
+      "Bradford City",
+      "Bromley",
+      "Burton Albion",
+      "Cambridge United",
+      "Doncaster Rovers",
+      "Huddersfield Town",
+      "Leicester City",
+      "Leyton Orient",
+      "Luton Town",
+      "Mansfield Town",
+      "Milton Keynes Dons",
+      "Notts County",
+      "Oxford United",
+      "Peterborough United",
+      "Plymouth Argyle",
+      "Reading",
+      "Sheffield Wednesday",
+      "Stevenage",
+      "Stockport County",
+      "Wigan Athletic",
+      "Wycombe Wanderers",
+    ],
+  },
+  {
+    id: "league-two",
+    name: "League Two",
+    clubs: [
+      "Accrington Stanley",
+      "Barnet",
+      "Bristol Rovers",
+      "Cheltenham Town",
+      "Chesterfield",
+      "Colchester United",
+      "Crawley Town",
+      "Crewe Alexandra",
+      "Exeter City",
+      "Fleetwood Town",
+      "Gillingham",
+      "Grimsby Town",
+      "Newport County",
+      "Northampton Town",
+      "Oldham Athletic",
+      "Port Vale",
+      "Rochdale",
+      "Rotherham United",
+      "Salford City",
+      "Shrewsbury Town",
+      "Swindon Town",
+      "Tranmere Rovers",
+      "Walsall",
+      "York City",
+    ],
+  },
+];
+
 const DISPLAY_MODE_KEY = "ultimate-manager.display-mode";
 const RESOLUTION_KEY = "ultimate-manager.resolution";
 
@@ -26,6 +151,7 @@ const startGameMenu = document.querySelector<HTMLElement>(
 const countryMenu = document.querySelector<HTMLElement>(
   '[data-menu="countries"]',
 );
+const clubMenu = document.querySelector<HTMLElement>('[data-menu="clubs"]');
 const openStartMenuButton = document.querySelector<HTMLButtonElement>(
   '[data-action="open-start-menu"]',
 );
@@ -43,6 +169,25 @@ const englandCountryCheckbox = document.querySelector<HTMLInputElement>(
 );
 const countryNextButton = document.querySelector<HTMLButtonElement>(
   '[data-action="country-next"]',
+);
+const backToCountriesButton = document.querySelector<HTMLButtonElement>(
+  '[data-action="back-to-countries"]',
+);
+const divisionButtons = Array.from(
+  document.querySelectorAll<HTMLButtonElement>("[data-division]"),
+);
+const clubPickerPrompt =
+  document.querySelector<HTMLElement>("[data-club-picker-prompt]");
+const clubRoster = document.querySelector<HTMLElement>("[data-club-roster]");
+const clubRosterTitle = document.querySelector<HTMLElement>(
+  "[data-club-roster-title]",
+);
+const clubRosterCount = document.querySelector<HTMLElement>(
+  "[data-club-roster-count]",
+);
+const clubList = document.querySelector<HTMLElement>("[data-club-list]");
+const clubSelectionStatus = document.querySelector<HTMLElement>(
+  "[data-club-selection-status]",
 );
 const settingsButton = document.querySelector<HTMLButtonElement>(
   '[data-action="settings"]',
@@ -91,6 +236,7 @@ let pendingUpdate: Update | null = null;
 let updateInstallationStarted = false;
 let updateToastHideTimer: number | null = null;
 let menuTransitionTimer: number | null = null;
+let selectedClubButton: HTMLButtonElement | null = null;
 
 if (versionLabel) {
   versionLabel.textContent = `v${version}`;
@@ -207,6 +353,62 @@ const switchMenu = (
     currentMenu.classList.remove("is-leaving-left", "is-leaving-right");
     menuTransitionTimer = null;
   }, 220);
+};
+
+const revealDivision = (divisionId: string) => {
+  const division = ENGLISH_DIVISIONS.find(({ id }) => id === divisionId);
+
+  if (
+    !division ||
+    !clubPickerPrompt ||
+    !clubRoster ||
+    !clubRosterTitle ||
+    !clubRosterCount ||
+    !clubList ||
+    !clubSelectionStatus
+  ) {
+    return;
+  }
+
+  divisionButtons.forEach((button) => {
+    const isActive = button.dataset.division === divisionId;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive.toString());
+  });
+
+  selectedClubButton = null;
+  clubRosterTitle.textContent = division.name;
+  clubRosterCount.textContent = `${division.clubs.length} clubs · 2026/27`;
+  clubSelectionStatus.textContent = "Choose a club from the list.";
+  clubList.replaceChildren();
+  clubList.scrollTop = 0;
+
+  const clubButtons = document.createDocumentFragment();
+
+  division.clubs.forEach((clubName) => {
+    const button = document.createElement("button");
+    button.className = "club-button";
+    button.type = "button";
+    button.textContent = clubName;
+    button.dataset.club = clubName;
+    button.setAttribute("aria-pressed", "false");
+
+    button.addEventListener("click", () => {
+      selectedClubButton?.classList.remove("is-selected");
+      selectedClubButton?.setAttribute("aria-pressed", "false");
+
+      selectedClubButton = button;
+      button.classList.add("is-selected");
+      button.setAttribute("aria-pressed", "true");
+      clubSelectionStatus.textContent = `Selected: ${clubName}`;
+    });
+
+    clubButtons.append(button);
+  });
+
+  clubList.append(clubButtons);
+  clubPickerPrompt.hidden = true;
+  clubRoster.hidden = false;
 };
 
 const showUpdateToast = (update: Update) => {
@@ -428,6 +630,23 @@ englandCountryCheckbox?.addEventListener("change", () => {
   if (countryNextButton) {
     countryNextButton.disabled = !englandCountryCheckbox.checked;
   }
+});
+
+countryNextButton?.addEventListener("click", () => {
+  if (!englandCountryCheckbox?.checked) return;
+
+  switchMenu(countryMenu, clubMenu, "forward");
+});
+
+backToCountriesButton?.addEventListener("click", () => {
+  switchMenu(clubMenu, countryMenu, "back");
+});
+
+divisionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const divisionId = button.dataset.division;
+    if (divisionId) revealDivision(divisionId);
+  });
 });
 
 closeSettingsButtons.forEach((button) => {

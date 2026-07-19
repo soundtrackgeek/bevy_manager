@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0] - 2026-07-19
+
+### Added
+
+- Club selection after choosing England, with division controls for the 2026/27 Premier League, Championship, League One, and League Two.
+- Complete alphabetized club lists for all 92 teams across England's top four divisions.
+- Selectable club states and Back navigation to the playable-country picker.
+
 ## [0.6.2] - 2026-07-16
 
 ### Changed

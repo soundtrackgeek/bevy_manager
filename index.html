@@ -149,6 +149,104 @@
         </div>
       </section>
 
+      <section
+        class="menu club-selection-screen"
+        data-menu="clubs"
+        aria-labelledby="club-selection-title"
+        aria-hidden="true"
+        hidden
+      >
+        <header class="club-selection-header">
+          <div>
+            <h2 id="club-selection-title">Choose a Club</h2>
+            <p>England · 2026/27 season</p>
+          </div>
+
+          <button
+            class="club-back-button"
+            type="button"
+            data-action="back-to-countries"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14.5 5-7 7 7 7" />
+            </svg>
+            Back
+          </button>
+        </header>
+
+        <nav class="division-list" aria-label="English football divisions">
+          <button
+            class="division-button"
+            type="button"
+            data-division="premier-league"
+            aria-pressed="false"
+            data-menu-focus
+          >
+            <span>Premier League</span>
+            <small>20 clubs</small>
+          </button>
+          <button
+            class="division-button"
+            type="button"
+            data-division="championship"
+            aria-pressed="false"
+          >
+            <span>Championship</span>
+            <small>24 clubs</small>
+          </button>
+          <button
+            class="division-button"
+            type="button"
+            data-division="league-one"
+            aria-pressed="false"
+          >
+            <span>League One</span>
+            <small>24 clubs</small>
+          </button>
+          <button
+            class="division-button"
+            type="button"
+            data-division="league-two"
+            aria-pressed="false"
+          >
+            <span>League Two</span>
+            <small>24 clubs</small>
+          </button>
+        </nav>
+
+        <div class="club-selection-body">
+          <div class="club-picker-prompt" data-club-picker-prompt>
+            <span class="club-picker-prompt-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3 5 6.5v5.2c0 4.2 2.8 7.6 7 9.3 4.2-1.7 7-5.1 7-9.3V6.5L12 3Z" />
+                <path d="M9 11.8 11.2 14 15.5 9.5" />
+              </svg>
+            </span>
+            <h3>Select a division</h3>
+            <p>Choose one of the four divisions above to reveal its clubs.</p>
+          </div>
+
+          <section
+            class="club-roster"
+            data-club-roster
+            aria-labelledby="club-roster-title"
+            hidden
+          >
+            <header class="club-roster-header">
+              <div>
+                <h3 id="club-roster-title" data-club-roster-title></h3>
+                <p data-club-roster-count></p>
+              </div>
+              <p class="club-selection-status" data-club-selection-status aria-live="polite">
+                Choose a club from the list.
+              </p>
+            </header>
+
+            <div class="club-list" data-club-list></div>
+          </section>
+        </div>
+      </section>
+
       <img
         class="brand-logo"
         src="/src/assets/ultimate-manager-logo.png"

@@ -10,8 +10,10 @@ Ultimate Manager is a football management game built with Rust and Tauri 2.
 - Main menu actions for starting a new game, loading a game, settings, and quitting.
 - Start New Game opens a second menu for Start a new Career, Quickstart, and Scenario Mode, with a working return to the main menu.
 - Start a new Career opens a playable-country picker with England available; Italy, Norway, Spain, and France are shown but disabled, with Back returning to the start-game menu.
+- Continuing with England opens a club picker for the 2026/27 Premier League, Championship, League One, and League Two, covering all 92 clubs across the four divisions.
+- Division buttons reveal their clubs, club choices receive a visible selected state, and Back returns to the playable-country picker.
 - Persistent display settings for Windowed, Fullscreen Windowed, and Fullscreen modes, with common resolution choices restored whenever the game starts.
-- The Settings button opens the display options and the Quit Game button closes the application; Load Game, Quickstart, Scenario Mode, and the country picker's Next step remain intentionally inactive for now.
+- The Settings button opens the display options and the Quit Game button closes the application; Load Game, Quickstart, and Scenario Mode remain intentionally inactive for now.
 - Automatic startup update checks with an in-game download and install notification.
 - Signed updates install from inside the game and restart Ultimate Manager when finished.
 - Application version displayed in the bottom-left corner.
